@@ -1,42 +1,58 @@
 # Video Guess Book
 
-Video Guess Book — project by Nabil Aulia Dika (dezzorigin).
+Video Guess Book — project oleh Nabil Aulia Dika (dezzorigin).
 
 ## Status Proyek
 
-**Hampir selesai (beta)** _(README ada, build artifact ada (sudah di-build))_
+**Hampir selesai (beta)** _(README ada, build artifact ada)_
 
-## Tech Stack
+## 📋 Tech Stack
 
 Vite
 
-## Struktur Proyek
+## 🏗️ Arsitektur
+
+```mermaid
+flowchart LR
+  U[Pengguna] --> B[Browser]
+  B --> F[Frontend (React/Next.js)]
+  F --> A[API Routes]
+  A --> D[(Database)]
+```
+
+## 📁 Struktur Proyek
 
 ```
-.gitignore
-DESIGN.md
-README.md
+.wrangler/
 fonts/
 icons/
-index.html
-package-lock.json
-package.json
 public/
 src/
+DESIGN.md
+LICENSE
+PRD.md
+README.md
+index.html
+package.json
 styles.css
 vite.config.js
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ```bash
+# Install dependencies
 npm install
+
+# Jalankan development server
 npm run dev
 ```
 
-## Lisensi
+> Untuk project HTML/Python/Go, lihat instruksi di atas atau file konfigurasi.
 
-MIT — lihat file [LICENSE](./LICENSE).
+## 📄 Lisensi
+
+MIT — lihat [LICENSE](./LICENSE).
 
 ---
-_Dibuat dan dikelola oleh Nabil Aulia Dika. Kontribusi dan issue welcome._
+_Dikembangkan oleh **dezzorigin** (Nabil Aulia Dika)._
