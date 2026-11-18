@@ -3,13 +3,14 @@
  * Client shell speaks the same Crextio language as the operator dashboard:
  * flat cream page, rounded frame, pill topbar. Recording stays frameless.
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useKiosk } from './context/KioskContext.jsx';
 import { Settings } from 'lucide-react';
 
 import { ToastContainer } from './components/common/ToastContainer.jsx';
 
 import { ScreenWelcome } from './components/screens/ScreenWelcome.jsx';
+import { ScreenLanding } from './components/screens/ScreenLanding.jsx';
 import { ScreenGuestName } from './components/screens/ScreenGuestName.jsx';
 import { ScreenGreeting } from './components/screens/ScreenGreeting.jsx';
 import { ScreenRecording } from './components/screens/ScreenRecording.jsx';
@@ -44,10 +45,18 @@ function KioskTopbar() {
 export default function App() {
   const { currentScreen, setIsPinModalOpen } = useKiosk();
 
+  // Landing page (#landing) hidup di atas kiosk yang sama; hash lain
+  // (#admin / #operator) tetap membuka modal PIN seperti sebelumnya.
+  const [isLanding, setIsLanding] = useState(
+    () => window.location.hash === '#landing'
+  );
+
   // Hash Navigation (#admin or #operator opens PIN Modal directly)
   useEffect(() => {
     const handleHash = () => {
-      if (window.location.hash === '#admin' || window.location.hash === '#operator') {
+      const hash = window.location.hash;
+      setIsLanding(hash === '#landing');
+      if (hash === '#admin' || hash === '#operator') {
         setIsPinModalOpen(true);
       }
     };
@@ -55,6 +64,19 @@ export default function App() {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, [setIsPinModalOpen]);
+
+  if (isLanding) {
+    return (
+      <div id="app-root">
+        <ScreenLanding onOpenKiosk={() => setIsLanding(false)} />
+        <PinModal />
+        <OperatorDashboard />
+        <ExportModal />
+        <ConfirmModal />
+        <ToastContainer />
+      </div>
+    );
+  }
 
   const isFrameless = currentScreen === 'recording';
 

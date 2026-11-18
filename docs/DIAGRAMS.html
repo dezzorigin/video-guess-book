@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenWedding — Diagram Arsitektur</title>
+<style>
+  :root { --ink:#1A1C14; --muted:#646A52; --line:#D8DCC8; --card:#fff; --bg:#F5F0E4; --accent:#3A3E22; --gold:#8A6F2B; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 -apple-system,"Segoe UI",Inter,Roboto,sans-serif; }
+  header { max-width:960px; margin:0 auto; padding:56px 24px 8px; }
+  header p.kicker { text-transform:uppercase; letter-spacing:.14em; font-size:12px; color:var(--muted); margin:0 0 8px; }
+  header h1 { font-size:40px; line-height:1.05; letter-spacing:-.03em; margin:0 0 12px; }
+  header p.lede { color:var(--muted); max-width:640px; margin:0; }
+  main { max-width:960px; margin:0 auto; padding:24px; }
+  figure { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 24px; margin:0 0 24px; }
+  figcaption { margin-top:16px; }
+  figcaption h2 { font-size:20px; letter-spacing:-.02em; margin:0 0 4px; }
+  figcaption p { color:var(--muted); margin:0; font-size:14px; }
+  .num { display:inline-block; width:28px; height:28px; line-height:28px; text-align:center; border-radius:50%; background:var(--accent); color:#fff; font-size:13px; font-weight:700; margin-right:8px; vertical-align:2px; }
+  footer { max-width:960px; margin:0 auto; padding:0 24px 56px; color:var(--muted); font-size:13px; }
+  svg { width:100%; height:auto; display:block; }
+  .box { fill:#fff; stroke:#1A1C14; stroke-width:1.5; }
+  .box-fill { fill:#3A3E22; stroke:#3A3E22; stroke-width:1.5; }
+  .box-soft { fill:#F5F0E4; stroke:#D8DCC8; stroke-width:1.5; }
+  .box-gold { fill:#8A6F2B; stroke:#8A6F2B; stroke-width:1.5; }
+  .lbl { font:600 14px -apple-system,"Segoe UI",Inter,sans-serif; fill:#1A1C14; }
+  .lbl-w { font:600 14px -apple-system,"Segoe UI",Inter,sans-serif; fill:#fff; }
+  .sub { font:400 12px -apple-system,"Segoe UI",Inter,sans-serif; fill:#646A52; }
+  .sub-w { font:400 12px -apple-system,"Segoe UI",Inter,sans-serif; fill:#D8DCC8; }
+  .arr { stroke:#1A1C14; stroke-width:1.5; fill:none; marker-end:url(#ah); }
+  .arr-dash { stroke:#8A6F2B; stroke-width:1.5; fill:none; stroke-dasharray:5 4; marker-end:url(#ah); }
+  .tag { font:700 11px -apple-system,"Segoe UI",Inter,sans-serif; fill:#646A52; letter-spacing:.08em; }
+</style>
+</head>
+<body>
+<header>
+  <p class="kicker">OpenWedding · Diagram</p>
+  <h1>Arsitektur, alur tamu &amp; model data</h1>
+  <p class="lede">Tiga diagram editorial — bukan Mermaid. Arsitektur runtime (semua jalan di
+  browser; Pages hanya menyajikan file statis), alur tamu 4 langkah + jalur operator,
+  dan model data lokal (IndexedDB + localStorage). Dibuat mengikuti gaya
+  diagram-design: HTML + SVG murni.</p>
+</header>
+<main>
+
+<figure>
+<svg viewBox="0 0 880 460" role="img" aria-label="Diagram arsitektur runtime OpenWedding">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1A1C14"/></marker></defs>
+  <text class="tag" x="20" y="24">RUNTIME — SEMUA DI BROWSER · PAGES HANYA MENYAJIKAN FILE STATIS</text>
+  <rect class="box" x="20" y="44" width="170" height="76" rx="12"/>
+  <text class="lbl" x="105" y="76" text-anchor="middle">Tamu / Operator</text>
+  <text class="sub" x="105" y="96" text-anchor="middle">tablet di meja resepsi</text>
+  <rect class="box-fill" x="260" y="44" width="220" height="76" rx="12"/>
+  <text class="lbl-w" x="370" y="76" text-anchor="middle">Cloudflare Pages</text>
+  <text class="sub-w" x="370" y="96" text-anchor="middle">video-guess-book.pages.dev</text>
+  <rect class="box-soft" x="550" y="44" width="310" height="76" rx="12"/>
+  <text class="lbl" x="705" y="70" text-anchor="middle">Vite build (dist/)</text>
+  <text class="sub" x="705" y="90" text-anchor="middle">React 19 SPA · JS ~420 KB</text>
+  <path class="arr" d="M190 82 H256"/>
+  <path class="arr" d="M480 82 H546"/>
+  <rect class="box" x="260" y="170" width="220" height="96" rx="12"/>
+  <text class="lbl" x="370" y="200" text-anchor="middle">React App</text>
+  <text class="sub" x="370" y="220" text-anchor="middle">KioskContext · 6 layar + landing</text>
+  <text class="sub" x="370" y="238" text-anchor="middle">4 modal · toast</text>
+  <rect class="box-soft" x="550" y="170" width="310" height="96" rx="12"/>
+  <text class="lbl" x="705" y="200" text-anchor="middle">Services</text>
+  <text class="sub" x="705" y="220" text-anchor="middle">storage · media · export (ZIP)</text>
+  <text class="sub" x="705" y="238" text-anchor="middle">themes · confetti</text>
+  <path class="arr" d="M370 120 V166"/>
+  <path class="arr" d="M480 218 H546"/>
+  <rect class="box-gold" x="20" y="170" width="170" height="96" rx="12"/>
+  <text class="lbl-w" x="105" y="200" text-anchor="middle">Kamera + Mic</text>
+  <text class="sub-w" x="105" y="220" text-anchor="middle">getUserMedia</text>
+  <text class="sub-w" x="105" y="238" text-anchor="middle">MediaRecorder</text>
+  <path class="arr" d="M190 218 H256"/>
+  <rect class="box" x="260" y="316" width="220" height="96" rx="12"/>
+  <text class="lbl" x="370" y="346" text-anchor="middle">IndexedDB</text>
+  <text class="sub" x="370" y="366" text-anchor="middle">OpenWeddingDB v2</text>
+  <text class="sub" x="370" y="384" text-anchor="middle">videos · events</text>
+  <rect class="box-soft" x="550" y="316" width="310" height="96" rx="12"/>
+  <text class="lbl" x="705" y="346" text-anchor="middle">Service Worker (Workbox)</text>
+  <text class="sub" x="705" y="366" text-anchor="middle">generateSW · precache 49 entri</text>
+  <text class="sub" x="705" y="384" text-anchor="middle">autoUpdate · offline-first</text>
+  <path class="arr" d="M370 266 V312"/>
+  <path class="arr-dash" d="M660 266 V312"/>
+  <text class="sub" x="20" y="440">Tidak ada server, API, database eksternal, atau upload. Video hanya keluar dari perangkat lewat export ZIP manual oleh operator.</text>
+</svg>
+<figcaption><h2><span class="num">1</span>Arsitektur runtime</h2>
+<p>Pages menyajikan <code>dist/</code> statis. React + service worker + IndexedDB semuanya hidup di
+browser perangkat acara. Satu-satunya aliran keluar adalah unduhan ZIP yang dipicu operator.</p></figcaption>
+</figure>
+
+<figure>
+<svg viewBox="0 0 880 400" role="img" aria-label="Diagram alur tamu dan operator OpenWedding">
+  <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1A1C14"/></marker></defs>
+  <text class="tag" x="20" y="24">ALUR TAMU — 4 LANGKAH · JALUR OPERATOR DI BAWAH</text>
+  <rect class="box-fill" x="20" y="44" width="140" height="84" rx="12"/>
+  <text class="lbl-w" x="90" y="76" text-anchor="middle">1 · Sambutan</text>
+  <text class="sub-w" x="90" y="96" text-anchor="middle">nama mempelai</text>
+  <text class="sub-w" x="90" y="112" text-anchor="middle">“Sentuh untuk Mulai”</text>
+  <rect class="box" x="190" y="44" width="140" height="84" rx="12"/>
+  <text class="lbl" x="260" y="76" text-anchor="middle">2 · Nama tamu</text>
+  <text class="sub" x="260" y="96" text-anchor="middle">isi nama / Lewati</text>
+  <text class="sub" x="260" y="112" text-anchor="middle">(anonim)</text>
+  <rect class="box" x="360" y="44" width="140" height="84" rx="12"/>
+  <text class="lbl" x="430" y="76" text-anchor="middle">3 · Hitung mundur</text>
+  <text class="sub" x="430" y="96" text-anchor="middle">3 detik, otomatis</text>
+  <text class="sub" x="430" y="112" text-anchor="middle">ke layar rekam</text>
+  <rect class="box-gold" x="530" y="44" width="140" height="84" rx="12"/>
+  <text class="lbl-w" x="600" y="76" text-anchor="middle">4 · Rekam</text>
+  <text class="sub-w" x="600" y="96" text-anchor="middle">REC + timer + mic</text>
+  <text class="sub-w" x="600" y="112" text-anchor="middle">stop / auto-stop</text>
+  <rect class="box" x="700" y="44" width="160" height="84" rx="12"/>
+  <text class="lbl" x="780" y="76" text-anchor="middle">5 · Pratinjau</text>
+  <text class="sub" x="780" y="96" text-anchor="middle">putar ulang · simpan</text>
+  <text class="sub" x="780" y="112" text-anchor="middle">atau rekam ulang</text>
+  <path class="arr" d="M160 86 H186" marker-end="url(#ah2)"/>
+  <path class="arr" d="M330 86 H356" marker-end="url(#ah2)"/>
+  <path class="arr" d="M500 86 H526" marker-end="url(#ah2)"/>
+  <path class="arr" d="M670 86 H696" marker-end="url(#ah2)"/>
+  <rect class="box-soft" x="20" y="170" width="200" height="84" rx="12"/>
+  <text class="lbl" x="120" y="200" text-anchor="middle">6 · Terima kasih</text>
+  <text class="sub" x="120" y="220" text-anchor="middle">confetti · auto-kembali 8 dtk</text>
+  <rect class="box" x="250" y="170" width="200" height="84" rx="12"/>
+  <text class="lbl" x="350" y="200" text-anchor="middle">Simpan → IndexedDB</text>
+  <text class="sub" x="350" y="220" text-anchor="middle">blob video + metadata</text>
+  <rect class="box-soft" x="480" y="170" width="380" height="84" rx="12"/>
+  <text class="lbl" x="670" y="200" text-anchor="middle">Operator (PIN 1234) — EO Control Center</text>
+  <text class="sub" x="670" y="220" text-anchor="middle">Overview · Galeri · Events · Hardware · Export ZIP</text>
+  <path class="arr" d="M780 128 V166" marker-end="url(#ah2)"/>
+  <path class="arr" d="M450 212 H476" marker-end="url(#ah2)"/>
+  <path class="arr" d="M250 212 H246" marker-end="url(#ah2)"/>
+  <text class="sub" x="20" y="300">Jalur masuk dashboard: ikon gerigi di topbar · ketuk 5× nama mempelai · hash #admin. Landing produk di #landing (di luar alur tamu).</text>
+  <text class="sub" x="20" y="322">Gagal rekam (izin kamera ditolak / perangkat tidak ada) → toast “Gagal mengakses kamera/mikrofon” dan tamu tetap di layar sambutan.</text>
+  <text class="sub" x="20" y="344">“Ulangi Rekam” dari pratinjau kembali ke hitung mundur; sesi (nama + blob lama) di-reset.</text>
+</svg>
+<figcaption><h2><span class="num">2</span>Alur tamu &amp; operator</h2>
+<p>Satu arah, satu aksi utama per layar. Operator tidak pernah masuk alur tamu — dashboard
+adalah modal terpisah di balik PIN.</p></figcaption>
+</figure>
+
+<figure>
+<svg viewBox="0 0 880 330" role="img" aria-label="Diagram model data OpenWedding">
+  <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1A1C14"/></marker></defs>
+  <text class="tag" x="20" y="24">MODEL DATA — INDEXEDDB OPENDWEDDINGDB V2 + LOCALSTORAGE</text>
+  <rect class="box" x="20" y="44" width="270" height="150" rx="12"/>
+  <text class="lbl" x="155" y="74" text-anchor="middle">videos (object store)</text>
+  <text class="sub" x="40" y="98">id — vid_&lt;ts&gt;_&lt;rand&gt; (key)</text>
+  <text class="sub" x="40" y="118">eventId — index (non-unique)</text>
+  <text class="sub" x="40" y="138">guestName · filename · timestamp</text>
+  <text class="sub" x="40" y="158">blob (video) · sizeMB · rawDate</text>
+  <text class="sub" x="40" y="178">eventTitle</text>
+  <rect class="box" x="320" y="44" width="270" height="150" rx="12"/>
+  <text class="lbl" x="455" y="74" text-anchor="middle">events (object store)</text>
+  <text class="sub" x="340" y="98">id — evt_&lt;ts&gt; (key)</text>
+  <text class="sub" x="340" y="118">groomName · brideName · title</text>
+  <text class="sub" x="340" y="138">subtitle · theme · recordSeconds</text>
+  <text class="sub" x="340" y="158">createdAt · status (active/completed)</text>
+  <rect class="box-soft" x="620" y="44" width="240" height="150" rx="12"/>
+  <text class="lbl" x="740" y="74" text-anchor="middle">localStorage</text>
+  <text class="sub" x="640" y="98">openwedding_kiosk_config</text>
+  <text class="sub" x="640" y="118">coupleNames · eventDateLine</text>
+  <text class="sub" x="640" y="138">recordSeconds · theme</text>
+  <text class="sub" x="640" y="158">operatorPin (default 1234)</text>
+  <text class="sub" x="640" y="178">openwedding_active_event_id</text>
+  <path class="arr" d="M290 110 H316" marker-end="url(#ah3)"/>
+  <path class="arr-dash" d="M590 110 H616" marker-end="url(#ah3)"/>
+  <text class="sub" x="20" y="230">videos.eventId → events.id (relasi logis; IndexedDB tidak punya foreign key — filter via index eventId).</text>
+  <text class="sub" x="20" y="252">Config localStorage adalah cermin event aktif (disinkronkan tiap ganti/buat/edit event) agar layar sambutan bisa render tanpa menunggu IndexedDB.</text>
+  <text class="sub" x="20" y="274">Export ZIP membaca videos per event + menulis Daftar_Tamu.csv &amp; Rekap.txt dari field yang sama.</text>
+</svg>
+<figcaption><h2><span class="num">3</span>Model data</h2>
+<p>Dua store IndexedDB + dua key localStorage. Tidak ada skema server; versi DB 2
+(menambah store events + index eventId di atas store videos v1).</p></figcaption>
+</figure>
+
+</main>
+<footer>OpenWedding · dezzorigin/video-guess-book · Diagram dibuat 2026-11-19 mengikuti gaya
+diagram-design (HTML + SVG, bukan Mermaid). Lihat juga <code>docs/ARCHITECTURE.md</code>.</footer>
+</body>
+</html>

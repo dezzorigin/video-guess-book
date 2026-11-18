@@ -64,6 +64,14 @@ export function ScreenWelcome() {
           <p style={{ marginTop: 12, fontSize: 13, color: 'var(--c-ink-3)' }}>
             Durasi maks {config.recordSeconds || 60} detik • Tersimpan offline di perangkat ini
           </p>
+          <p style={{ marginTop: 6, fontSize: 13 }}>
+            <a
+              href="#landing"
+              style={{ color: 'var(--c-ink-3)', textDecoration: 'underline', textUnderlineOffset: 3 }}
+            >
+              Tentang OpenWedding — fitur, cara kerja &amp; kode sumber
+            </a>
+          </p>
         </div>
 
         <div className="kiosk-hero-visual" aria-label="Cara kerja">
