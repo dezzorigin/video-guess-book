@@ -1,5 +1,5 @@
 # OpenWedding — robots.txt
-# https://openwedding.pages.dev/
+# https://video-guess-book.pages.dev/
 
 User-agent: *
 Allow: /
@@ -30,4 +30,4 @@ User-agent: Bytespider
 Allow: /
 
 # Sitemap location
-Sitemap: https://openwedding.pages.dev/sitemap.xml
+Sitemap: https://video-guess-book.pages.dev/sitemap.xml

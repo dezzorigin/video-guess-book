@@ -1,91 +1,115 @@
-# Design System: Regesit 1-Page Landing Platform
+# Design System: OpenWedding Kiosk
 
-> **Single Source of Truth for Regesit Landing Page Redesign**
-> Based on Blueprint Layout (`/home/rvlionxz/Downloads/Layout Desain.png`), Brevo Pricing UI, and AR Shakir Process Flow.
+> **Single Source of Truth untuk tampilan OpenWedding.**
+> File ini menggantikan DESIGN.md lama (2026-11-19) yang isinya desain
+> landing Regesit hasil tempel — tidak ada hubungannya dengan repo ini.
+> Yang benar di bawah ini, diambil dari `styles.css` (v3) + `src/`.
 
----
+## 1. Produk & konteks pakai
 
-## 1. Page Architecture & Section Order (Top to Bottom)
+Kiosk video guestbook di meja resepsi: satu perangkat (tablet/laptop),
+tamu datang silih berganti tanpa operator menjaga layar. Desain harus:
 
-### Section 1: Top Navigation Bar
-- **Logo:** `Regesit` brand badge in Royal Blue (`#1D4ED8`).
-- **Nav Links:** `Beranda`, `Layanan Fitur`, `Pricing`.
-- **CTA:** `Sign Up` / `Login` primary buttons.
+- **Terbaca dari jarak 1 meter** — judul besar, satu aksi utama per layar.
+- **Tidak bisa salah ketuk** — satu tombol besar per langkah; tombol
+  berbahaya (hapus) selalu di balik konfirmasi + PIN.
+- **Tetap elegan** — ini pernikahan: krem hangat, emas, serif display.
 
-### Section 2: Hero Section
-- **Headline:** `"Registrasi & Ticketing Event Tanpa Antrian."`
-- **Sub-headline:** `"Solusi manajemen event lengkap: Offline QR check-in 3 detik, Webinar Online otomatis, dan Hybrid Event terpadu."`
-- **CTA Button:** `"Buat Event Gratis"` (Royal Blue `#1D4ED8`).
+## 2. Token desain (`styles.css`, `:root`)
 
-### Section 3: Segmented Control & Dynamic Content Area (Kotak Merah)
-- **Segmented Control (3 Toggle Switch):**
-  - `[ 📍 Event Offline ]` | `[ 💻 Event Online ]` | `[ ⚡ Hybrid Event ]`
-- **Dynamic Content Container (Area Merah):**
-  - All content inside updates dynamically based on the active Segmented Control toggle.
-  - **Rules for Content Inside Area Merah:**
-    - ❌ **NO CARD BLOAT:** Text and feature points sit directly on the clean white canvas using space and typography. Do NOT wrap plain text in generic card boxes.
-    - **1. Penjelasan Event:** Clean title (`h2`) and paragraph description explaining the selected event type.
-    - **2. Penjelasan Fitur:** Feature checklist and icon-text rows directly on canvas.
-    - **3. Step By Step Penggunaan:** S-Curve process flow featuring an organic curved connector line, large watermark numbers (`1`, `2`, `3`), and 3 connected waypoint nodes (`01. Form & QR`, `02. Simpan Tiket`, `03. Scan 3 Detik`).
+| Token | Nilai | Peran |
+|---|---|---|
+| `--c-bg` | `#FFFFFF` | Kanvas putih |
+| `--c-surface` | `#FFFFFF` | Kartu putih |
+| `--c-surface-2` | `#F8FAFC` | Kanvas sekunder |
+| `--c-surface-hi` | `#EFF1E6` | Hover |
+| `--c-border` | `#D8DCC8` | Border terlihat (bukan samar) |
+| `--c-ink` | `#1A1C14` | Teks utama (kontras 16:1) |
+| `--c-ink-2` | `#3F4232` | Teks sekunder (9:1) |
+| `--c-ink-3` | `#646A52` | Teks muted (5:1) |
+| `--c-olive` | `#3A3E22` | Primer (tombol utama) |
+| `--c-gold` | `#8A6F2B` | Aksen (progress aktif, ikon) |
+| `--c-danger` | `#B42323` | Hapus / stop |
+| `--c-success` | `#1F6B2E` | Toast sukses |
+| `--f-display` | Playfair Display, Georgia, serif | Judul |
+| `--f-ui` | Inter, Outfit, system sans | Body & UI |
 
-### Section 4: Pricing Section (Brevo Pricing UI Specification)
-- **Headline:** `"Pricing & Paket Event"`
-- **Synced Toggle Controls:**
-  - Row 1: Event Type (`Offline` | `Online` | `Hybrid`) — synchronized with the hero toggle.
-  - Row 2: Billing Cycle (`Monthly` | `Yearly (-10%)`).
-- **4 Pricing Cards:**
-  - `Free` (Rp 0), `Starter` (Rp 72k - Featured), `Standard` (Rp 285k), `Pro` (Custom).
-- **Customize Your Plan (2-Panel Brevo Layout):**
-  - **Left Panel (Configuration):**
-    - Plan Selection Tabs: `Starter (Gratis)`, `Standard`, `Pro`.
-    - Volume Slider: `Kapasitas Peserta Event` (Range 30 to 500+ participants).
-    - Optional Add-ons: Toggles for `Hapus Watermark Regesit` & `Kirim Tiket WA / SMS`.
-  - **Right Panel (Summary Card):**
-    - Package summary items, Billing toggle (`Monthly` / `Yearly`), real-time total price calculation (`Rp X`), and primary CTA button `"Buat Event Sekarang ➔"`.
+Radius: 8 / 14 / 20 / 28 / 36 px. Shadow: **tidak ada** (flat 2D, border
+yang bicara). Transisi `0.18s cubic-bezier(0.4, 0, 0.2, 1)`.
 
-### Section 5: Footer
-- Standard single-page footer with sitemap links, copyright, and platform support.
+### Tema event (`src/constants/themes.js`)
 
----
+Tema dipilih operator per event dan diterapkan via `data-theme` di
+`<html>`; token di atas adalah default (gold). Lima tema pastel:
 
-## 2. Color Palette & Roles (STRICTLY 2 COLORS)
+| Tema | bg | primary | aksen |
+|---|---|---|---|
+| Classic Gold & Champagne | `#F5F0E4` | `#4A4E2A` | `#9A8040` |
+| Sage Green & Olive | `#EBF2EA` | `#4A7050` | `#80A060` |
+| Blush Pink & Rose | `#FFF0F2` | `#A0506A` | `#C0788A` |
+| Lavender Mist & Violet | `#F5F3FF` | `#6D28D9` | `#8B5CF6` |
+| Sky Blue & Ocean | `#F0F9FF` | `#0284C7` | `#38BDF8` |
 
-- **Canvas Base & Surface:** Pure White (`#FFFFFF`) / Warm Light Neutral (`#F8FAFC`).
-- **Primary Accent & Interactive Elements:** Royal Blue (`#1D4ED8` / `#2563EB`).
-- **Primary Typography:** Deep Dark Slate (`#0B132A`).
-- **Secondary Typography:** Muted Slate (`#64748B`).
+## 3. Tipografi
 
----
+- Judul layar: `.heading-primary` — Playfair Display, `clamp(1.7rem, 4vw, 2.5rem)`.
+- Body: `.text-body` — Inter/Outfit 16 px, `line-height: 1.5`.
+- Font self-hosted: Outfit + Playfair Display di `public/fonts/`
+  (`@import '/fonts/fonts.css'`); Google Fonts `@import` di `styles.css`
+  hanya pelengkap saat online — offline tetap tampil dengan font lokal.
+- Ikon: lucide-react (SVG). **Tidak ada emoji sebagai ikon UI.**
+  (Pengecualian: `lucide-react` 1.x menghapus ikon brand — logo GitHub di
+  landing di-inline sebagai SVG `GithubMark` di `ScreenLanding.jsx`.)
 
-## 3. Typography & Spacing Rules
+## 4. Struktur layar kiosk
 
-- **Font Family:** `Plus Jakarta Sans`, sans-serif.
-- **Headlines:** Track-tight, bold weight (700-800), high contrast.
-- **Grouping:** Group elements with negative space (2x gap between groups vs within groups), NOT with unnecessary border boxes.
-- **Banned:** Wrapping plain text or step descriptions in card boxes; using emojis as UI icons (use Material Symbols / SVG icons only).
+```
+.cx-kiosk-bg > .cx-kiosk-frame
+  .cx-kiosk-topbar          logo "OpenWedding" | nama acara | tombol gerigi (PIN)
+  main.screen-container
+    #screen-welcome         hero split: copy + "Cara kerja — 3 ketuk saja"
+    #screen-guest-name      input nama + Lewati / Kembali / Lanjutkan
+    #screen-greeting        hitung mundur 3 detik
+    #screen-recording       FRAMElESS: video fullscreen + HUD (REC, mic, timer, stop)
+    #screen-preview         video hasil + Ulangi Rekam / Simpan Ucapan
+    #screen-thankyou        confetti + auto-kembali 8 detik
+  modal: PinModal, OperatorDashboard, ExportModal, ConfirmModal
+  ToastContainer
+```
 
----
+- Progress tamu: `.kiosk-progress` + 4 dot (`done` olive / `now` gold).
+- Tombol: `.btn` + `.btn-primary` (olive) / `.btn-secondary` (garis) /
+  `.btn-danger` (stop) / `.btn-lg`; varian hitam `.cx-btn-black`.
+- Kartu: `.glass-card` — putih, border 1.5 px, radius 20 px, tanpa shadow.
+- Layar rekam sengaja **tanpa frame** (video memenuhi layar, HUD pill di
+  atas/bawah) — satu-satunya layar frameless.
 
-## 4. Summary of Banned Anti-Patterns
+## 5. Landing page (`#landing`, `ScreenLanding.jsx`)
 
-1. ❌ **No Card Bloat:** Text, features, and steps MUST NOT be wrapped in generic rectangular card boxes.
-2. ❌ **No AI Slop:** No neon glows, no fake 3x3 identical card grids.
-3. ❌ **No Emojis as UI Icons:** Use SVG or Material Symbols icons only.
-4. ❌ **No Multipage Fragmentation:** Single-page landing page flow only.
+Satu halaman di atas token yang sama, kelas ber-prefix `.ow-`:
 
----
+1. **Navbar** (sticky): logo kiri, link Fitur/Cara kerja/Pratinjau tengah,
+   tautan GitHub (pill + mark GitHub) + tombol *Buka Kiosk* kanan.
+2. **Hero**: eyebrow "Video Guestbook Kiosk — Offline-first PWA", H1
+   "Ucapan pernikahan, direkam langsung di lokasi.", CTA *Mulai Kiosk* +
+   *Lihat cara kerja*, catatan "Gratis & open source (MIT)".
+3. **Pratinjau**: 3 kartu gambar (`/img/preview-*.png`) + caption.
+4. **Fitur**: grid 3 kolom × 6 fitur (ikon + judul + 1–2 kalimat).
+5. **Cara kerja**: 4 langkah bernomor + catatan operator (PIN, `#admin`).
+6. **Footer**: brand, tautan GitHub, *Buka Kiosk*, "Lisensi MIT — dezzorigin".
 
-## 5. Component Stylings & daisyUI Semantic Mappings
-- **daisyUI Theme Configuration:** `data-theme="light"`
-  - `primary`: `#1D4ED8` (Royal Blue)
-  - `base-100`: `#FFFFFF` (Canvas Base)
-  - `base-200`: `#F8FAFC` (Surface Neutral)
-  - `neutral`: `#0B132A` (Deep Slate Text)
-- **daisyUI Component Mappings:**
-  - **Navbar:** `navbar bg-base-100 border-b border-base-200`
-  - **Buttons:** `btn btn-primary` (Royal Blue `#1D4ED8`), `btn-outline` (Secondary)
-  - **Segmented Control / Tabs:** `tabs tabs-bordered`, `tab tab-active` (Blue underline)
-  - **Volume Range Slider:** `range range-primary` (Blue accent)
-  - **Add-on Switch:** `toggle toggle-primary` (Blue accent)
-  - **Pricing Cards:** `card bg-base-100 border border-base-200` (Used ONLY for Pricing Cards & Summary Card)
-- **Icons:** Material Symbols / SVG icons only. Emojis as UI icons are strictly BANNED.
+Responsif: ≤820 px grid jadi 1 kolom, nav link disembunyikan, label GitHub
+disembunyikan (ikon saja); ≤480 px langkah jadi 1 kolom.
+
+## 6. Aturan yang dijaga
+
+1. **Satu aksi utama per layar tamu** — tamu tidak pernah dihadapkan dua
+   tombol primer sekaligus.
+2. **Tidak ada card bloat di kiosk** — teks & langkah duduk langsung di
+   kanvas/kartu kaca, bukan kotak-kotak bertumpuk.
+3. **Kontras AA minimum** — muted text paling redup 5:1 di atas putih.
+4. **Tanpa glow/neon, tanpa gradien ramai** — flat, krem, emas, olive.
+5. **Semua teks antarmuka Bahasa Indonesia** (kecuali nama produk & istilah
+   teknis seperti "EO Control Center").
+6. **Aman disentuh** — tombol utama `min-height` besar, target ketuk ≥44 px
+   di layar kecil (lihat media query akhir `styles.css`).

@@ -1,0 +1,120 @@
+name: CI
+
+# CI untuk Vite + PWA (repo #28, pola PWA ketiga setelah #3/#15 — variasi:
+# audit PWA berupa skrip Node kustom, bukan Lighthouse; e2e Playwright
+# memakai kamera/mik palsu sehingga alur rekam teruji tanpa perangkat).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Build (Vite + PWA generateSW) ─────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (Vite)
+        run: npm run build
+
+      - name: Built output berisi landing + kiosk
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          grep -rq "video-guess-book.pages.dev" dist/index.html \
+            || (echo "URL kanonis hilang dari bundle" && exit 1)
+          grep -rq "github.com/dezzorigin/video-guess-book" dist/assets/ \
+            || (echo "tautan GitHub landing hilang dari bundle" && exit 1)
+          grep -rq "Ucapan pernikahan" dist/assets/ \
+            || (echo "hero landing hilang dari bundle" && exit 1)
+          grep -rq "Sentuh untuk Mulai" dist/assets/ \
+            || (echo "layar sambutan kiosk hilang dari bundle" && exit 1)
+          echo "bundle: landing + kiosk OK"
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  # ── Advisory sweep (OSV batch, tanpa auth) ─────────────────────────────
+  # Pola repo #24/#25/#26: 1 POST ke api.osv.dev/v1/querybatch untuk semua
+  # paket produksi. JANGAN ganti ke GitHub Advisory DB API + GITHUB_TOKEN
+  # (gagal deterministik 401 di CI orteam — token per-job bermasalah).
+  advisory-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: OSV sweep (produksi saja, HIGH/CRITICAL = gagal)
+        run: python3 scripts/advisory-sweep.py
+
+  # ── PWA audit (skrip Node kustom, tanpa Chrome) ────────────────────────
+  pwa-audit:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (Vite)
+        run: npm run build
+
+      - name: Audit manifest + service worker + ikon
+        run: npm run pwa:audit
+
+  # ── Playwright e2e (kamera/mik palsu) ──────────────────────────────────
+  playwright-e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build (Vite)
+        run: npm run build
+
+      - name: Run e2e (smoke)
+        run: npx playwright test e2e/smoke.spec.js
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/

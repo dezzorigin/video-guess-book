@@ -12,7 +12,8 @@ import {
   RotateCcw, Wrench, Download, Play, Trash2, CheckCircle,
   Search, Filter, Share2, Plus, ShieldCheck, HardDrive,
   FileSpreadsheet, FileText, CheckSquare, Square, ChevronDown, RefreshCw, Eye,
-  AlertTriangle, Activity, Clock, Users, TrendingUp, Zap, Database, Video
+  AlertTriangle, Activity, Clock, Users, TrendingUp, Zap, Database, Video,
+  KeyRound
 } from 'lucide-react';
 
 function buildAreaChartPaths(values, w = 600, h = 200, pad = 20) {  if (!values || values.length === 0) return { line: '', area: '', points: [] };
@@ -139,6 +140,30 @@ export function OperatorDashboard() {
     setEditTheme(themeId);
     document.documentElement.setAttribute('data-theme', themeId);
   }, []);
+
+  // Ganti PIN Operator (sebelumnya tidak ada UI-nya: PIN hanya bisa
+  // dibaca dari config; default 1234). PIN disimpan di localStorage
+  // via updateConfig — pengunci lokal, bukan autentikasi server.
+  const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [pinMsg, setPinMsg] = useState('');
+
+  const handleChangePin = useCallback(() => {
+    const pin = (newPin || '').trim();
+    if (!/^[0-9]{4,8}$/.test(pin)) {
+      setPinMsg('PIN harus 4–8 digit angka.');
+      return;
+    }
+    if (pin !== (confirmPin || '').trim()) {
+      setPinMsg('Konfirmasi PIN tidak cocok.');
+      return;
+    }
+    updateConfig({ operatorPin: pin });
+    setNewPin('');
+    setConfirmPin('');
+    setPinMsg('PIN operator berhasil diganti.');
+    showToast('PIN operator berhasil diganti.', 'success');
+  }, [newPin, confirmPin, updateConfig, showToast]);
 
   // Hardware State
   const [cameras, setCameras] = useState([]);
@@ -890,6 +915,55 @@ export function OperatorDashboard() {
                         </tbody>
                       </table>
                     </div>
+                  )}
+                </div>
+
+                {/* Ganti PIN Operator */}
+                <div className="cx-card cx-12">
+                  <div className="cx-row-top">
+                    <h3><KeyRound size={15} /> Keamanan — Ganti PIN Operator</h3>
+                    <span className="cx-pill line">PIN saat ini: {config.operatorPin ? 'diatur' : '1234 (default)'}</span>
+                  </div>
+                  <p className="sub">PIN melindungi dashboard dari tamu. PIN default <b>1234</b> — ganti sebelum acara. PIN hanya tersimpan di perangkat ini.</p>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: '0.85rem', fontWeight: 600 }}>
+                      PIN baru (4–8 digit)
+                      <input
+                        type="password"
+                        className="form-input"
+                        placeholder="PIN baru"
+                        maxLength={8}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={newPin}
+                        onChange={(e) => { setNewPin(e.target.value.replace(/[^0-9]/g, '')); setPinMsg(''); }}
+                        style={{ maxWidth: 180 }}
+                        aria-label="PIN baru"
+                      />
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: '0.85rem', fontWeight: 600 }}>
+                      Konfirmasi PIN baru
+                      <input
+                        type="password"
+                        className="form-input"
+                        placeholder="Ulangi PIN baru"
+                        maxLength={8}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={confirmPin}
+                        onChange={(e) => { setConfirmPin(e.target.value.replace(/[^0-9]/g, '')); setPinMsg(''); }}
+                        style={{ maxWidth: 180 }}
+                        aria-label="Konfirmasi PIN baru"
+                      />
+                    </label>
+                    <button className="btn btn-primary" onClick={handleChangePin}>
+                      <KeyRound size={16} /><span>Simpan PIN Baru</span>
+                    </button>
+                  </div>
+                  {pinMsg && (
+                    <p className="sub" style={{ marginTop: 10, color: pinMsg.includes('berhasil') ? 'var(--c-success)' : 'var(--c-danger)' }}>
+                      {pinMsg}
+                    </p>
                   )}
                 </div>
               </div>
