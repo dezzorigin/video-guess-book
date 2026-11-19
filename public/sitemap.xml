@@ -11,7 +11,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://video-guess-book.pages.dev/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://video-guess-book.pages.dev/"/>
     <image:image>
-      <image:loc>https://video-guess-book.pages.dev/img/og-image.png</image:loc>
+      <image:loc>https://video-guess-book.pages.dev/og-image.png</image:loc>
       <image:title>OpenWedding — Video Guestbook Kiosk untuk Pernikahan</image:title>
       <image:caption>Kiosk video guestbook offline-first untuk pernikahan dan event spesial di Indonesia</image:caption>
     </image:image>
